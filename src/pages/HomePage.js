@@ -1,13 +1,27 @@
 "use client"
 
-import React from "react"
-import { MapPin, Clock, Info } from "lucide-react"
-import PlaceCard from "../components/PlaceCard"
-import MapView from "../components/MapView"
-import { places } from "../data/places"
+import React, { useEffect, useState } from "react";
+import { MapPin, Clock, Info } from "lucide-react";
+import PlaceCard from "../components/PlaceCard";
+import MapView from "../components/MapView";
+import { places } from "../data/places";
+import { Api } from "../api/Api";
 
 function HomePage() {
-  const [activeTab, setActiveTab] = React.useState("all")
+  const [activeTab, setActiveTab] = useState("all");
+  const [placesData, setPlacesData] = useState([]);
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      const response = await Api.getNightSpots();
+      if(response && response.data){
+        setPlacesData(response.data.viewNightSpot.row);
+        console.log(response.data.viewNightSpot.row);
+      }
+    };
+
+    fetchPlaces();
+  }, []); 
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -99,41 +113,48 @@ function HomePage() {
                     공공시설
                   </button>
                   <button
-                    className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === "tourist" ? "bg-background text-foreground shadow-sm" : "hover:bg-muted hover:text-foreground"}`}
-                    onClick={() => setActiveTab("tourist")}
+                    className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === "village" ? "bg-background text-foreground shadow-sm" : "hover:bg-muted hover:text-foreground"}`}
+                    onClick={() => setActiveTab("village")}
                   >
-                    관광명소
+                    가로/마을
+                  </button>
+                  <button
+                    className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === "culture" ? "bg-background text-foreground shadow-sm" : "hover:bg-muted hover:text-foreground"}`}
+                    onClick={() => setActiveTab("culture")}
+                  >
+                    문화/체육
                   </button>
                   <button
                     className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === "park" ? "bg-background text-foreground shadow-sm" : "hover:bg-muted hover:text-foreground"}`}
                     onClick={() => setActiveTab("park")}
                   >
-                    공원
+                    공원/광장
                   </button>
                 </div>
               </div>
 
               <div className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {places
+                  {placesData
                     .filter((place) => {
                       if (activeTab === "all") return true
-                      if (activeTab === "public") return place.classification === "공공시설"
-                      if (activeTab === "tourist") return place.classification === "관광명소"
-                      if (activeTab === "park") return place.classification === "공원"
+                      if (activeTab === "public") return place.SUBJECT_CD === "공공시설"
+                      if (activeTab === "village") return place.SUBJECT_CD === "가로/마을"
+                      if (activeTab === "culture") return place.SUBJECT_CD === "문화/체육"
+                      if (activeTab === "park") return place.SUBJECT_CD === "공원/광장"
                       return true
                     })
                     .map((place) => (
                       <PlaceCard
-                        key={place.id}
-                        id={place.id}
-                        name={place.name}
-                        description={place.description}
-                        image={place.image}
-                        address={place.address}
-                        hours={place.hours}
-                        fee={place.fee}
-                        classification={place.classification}
+                        key={place.NUM}
+                        id={place.NUM}
+                        name={place.TITLE}
+                        description={place.CONTENTS}
+                        image={place.TITLE}
+                        address={place.ADDR}
+                        hours={place.OPERATING_TIME}
+                        fee={place.FREE_YN}
+                        classification={place.SUBJECT_CD}
                       />
                     ))}
                 </div>
@@ -278,7 +299,7 @@ function HomePage() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>서울특별시 중구 세종대로 110</li>
               <li>전화: 02-120</li>
-              <li>이메일: info@seoul.go.kr</li>
+              <li>이메일: ehdeld123@gmail.com</li>
             </ul>
             <div className="flex gap-4 mt-4">
               <a href="#" className="text-muted-foreground hover:text-primary">
@@ -335,7 +356,7 @@ function HomePage() {
           </div>
         </div>
         <div className="container mt-8 pt-8 border-t">
-          <p className="text-center text-sm text-muted-foreground">© 2023 서울 야경명소. All rights reserved.</p>
+          <p className="text-center text-sm text-muted-foreground">© 2025 서울 야경명소. All rights reserved.</p>
         </div>
       </footer>
     </div>

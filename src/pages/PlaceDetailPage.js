@@ -37,7 +37,7 @@ function PlaceDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="relative aspect-video rounded-xl overflow-hidden">
-          <img src={place.image || "/placeholder.svg"} alt={place.name} className="w-full h-full object-cover" />
+          <img src={place.image !== null ? ("/images/places/" + place.image  + ".jpg") : "/placeholder.svg"} alt={place.name} className="w-full h-full object-cover" />
           <span className="absolute top-4 right-4 text-sm inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
             {place.classification}
           </span>

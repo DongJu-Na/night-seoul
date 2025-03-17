@@ -5,7 +5,7 @@ function PlaceCard({ id, name, description, image, address, hours, fee, classifi
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden transition-all hover:shadow-lg">
       <div className="relative h-48 w-full">
-        <img src={image || "/placeholder.svg"} alt={name} className="w-full h-full object-cover" />
+        <img src={image !== null ? ("/images/places/" + image  + ".jpg") : "/placeholder.svg"} alt={name} className="w-full h-full object-cover" />
         <span className="absolute top-3 right-3 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
           {classification}
         </span>

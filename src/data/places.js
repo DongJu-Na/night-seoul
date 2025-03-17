@@ -54,7 +54,7 @@ export const places = [
     subway: "지하철 4호선 명동역 3번출구에서 남산순환버스 이용",
     bus: "남산순환버스 02, 03, 05번",
     parking: "남산공원 주차장",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/images/places/남산서울타워.jpg",
   },
   {
     id: 11,
